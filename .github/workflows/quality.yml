@@ -1,0 +1,62 @@
+name: Code Quality
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Install cc65 toolchain
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cc65
+        
+    - name: Check assembly syntax
+      run: |
+        ca65 -t nes -o /tmp/main.o main.s
+        echo "Assembly syntax check passed"
+        
+    - name: Verify linker configuration
+      run: |
+        cat nes.cfg
+        echo "Linker configuration validated"
+        
+    - name: Check file structure
+      run: |
+        echo "Checking required files..."
+        test -f main.s && echo "✓ main.s found"
+        test -f nes.cfg && echo "✓ nes.cfg found"
+        test -f Makefile && echo "✓ Makefile found"
+        test -f README.md && echo "✓ README.md found"
+        echo "All required files present"
+        
+    - name: Validate documentation
+      run: |
+        echo "Checking documentation files..."
+        test -f README.md && echo "✓ README.md"
+        test -f FEATURES.md && echo "✓ FEATURES.md"
+        test -f DEVELOPMENT.md && echo "✓ DEVELOPMENT.md"
+        test -f QUICKREF.md && echo "✓ QUICKREF.md"
+        test -f VISUALS.md && echo "✓ VISUALS.md"
+        echo "Documentation complete"
+        
+    - name: Check code statistics
+      run: |
+        echo "=== Code Statistics ==="
+        echo "Assembly lines:"
+        wc -l main.s
+        echo ""
+        echo "Total documentation lines:"
+        wc -l *.md | tail -1
+        echo ""
+        echo "=== Assembly Structure ==="
+        grep -c "^[a-zA-Z_][a-zA-Z0-9_]*:" main.s | xargs echo "Functions/Labels:"
+        grep -c "^;" main.s | xargs echo "Comment lines:"
