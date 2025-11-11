@@ -2,6 +2,12 @@
 
 A side-scrolling shoot 'em up (shmup) game for the Nintendo Entertainment System (NES) featuring a giant cat-shaped mecha!
 
+## Screenshots
+
+For gameplay screenshots and visual demonstrations, see [`docs/screenshots/`](docs/screenshots/README.md).
+
+*Note: Screenshots should be captured manually. See the screenshots directory README for capture instructions.*
+
 ## Features
 
 ### Gameplay
