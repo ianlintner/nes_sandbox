@@ -1,0 +1,53 @@
+name: Build NES ROM
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Install cc65 toolchain
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cc65
+        
+    - name: Verify cc65 installation
+      run: |
+        which ca65
+        which ld65
+        ca65 --version
+        
+    - name: Build NES ROM
+      run: make
+      
+    - name: Verify ROM output
+      run: |
+        ls -lh catmecha.nes
+        file catmecha.nes
+        
+    - name: Check ROM header
+      run: |
+        hexdump -C catmecha.nes | head -3
+        
+    - name: Upload ROM artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: catmecha-nes-rom
+        path: catmecha.nes
+        retention-days: 30
+        
+    - name: Upload ROM as release asset (on tag)
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: catmecha.nes
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
