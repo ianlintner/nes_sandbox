@@ -65,7 +65,9 @@ Screenshots should be captured manually due to limitations with automated headle
 
 ## Current Screenshots
 
-*Screenshots will be added here as they are captured*
+**Placeholder**: A placeholder image (`placeholder.png`) is included to demonstrate the expected format. Replace with actual gameplay screenshots following the capture process above.
+
+*Actual gameplay screenshots should be added here by maintainers following the capture process described above.*
 
 ## Technical Note
 
